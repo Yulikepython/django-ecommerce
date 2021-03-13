@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
   <head>
     <title>{% block head_title %}{% endblock %}</title>
     {% block extra_head %}
     {% endblock %}
   </head>
-  <body class="text-gray-600 w-screen">
+  <body>
     {% block body %}
 
     {% if messages %}
@@ -21,21 +19,17 @@
     </div>
     {% endif %}
 
-    <div class="flex border border-b-2 py-3 px-6 space-x-4 justify-end">
-        <div>
-            <strong>【Menu】</strong>
-        </div>
-        <div>
-        <ul class="space-x-4">
-            {% if user.is_authenticated %}
-            <li class="inline"><a href="{% url 'account_email' %}">Change E-mail</a></li>
-            <li class="inline"><a href="{% url 'account_logout' %}">Sign Out</a></li>
-            {% else %}
-            <li class="inline"><a href="{% url 'account_login' %}">Sign In</a></li>
-            <li class="inline"><a href="{% url 'account_signup' %}">Sign Up</a></li>
-            {% endif %}
-        </ul>
-        </div>
+    <div>
+      <strong>Menu:</strong>
+      <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+        {% else %}
+        <li><a href="{% url 'account_login' %}">Sign In</a></li>
+        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+        {% endif %}
+      </ul>
     </div>
     {% block content %}
     {% endblock %}
