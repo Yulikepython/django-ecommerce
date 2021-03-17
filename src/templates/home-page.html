@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+{% load humanize %}
 
   <!--Main layout-->
   <main>
@@ -92,7 +92,7 @@
                 {% if obj.discount_price %}
                   <strong>￥{{ obj.discount_price }}</strong>
                 {% else %}
-                  <strong>￥{{ obj.price }}</strong>
+                  <strong>￥{{ obj.price|intcomma:False }}</strong>
                 {% endif %}
                 </h4>
 

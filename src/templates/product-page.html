@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load humanize %}
 
   <!--Main layout-->
   <main class="mt-5 pt-4">
@@ -32,11 +33,11 @@
             <p class="lead">
               {% if object.discount_price %}
               <span class="mr-1">
-                <del>￥{{ object.price }}</del>
+                <del>￥{{ object.price|intcomma:False }}</del>
               </span>
-              <span>￥{{ object.discount_price }}</span>
+              <span>￥{{ object.discount_price|intcomma:False }}</span>
               {% else %}
-                <span>￥{{ object.price }}</span>
+                <span>￥{{ object.price|intcomma:False }}</span>
               {% endif %}
             </p>
             {% if object.description %}
