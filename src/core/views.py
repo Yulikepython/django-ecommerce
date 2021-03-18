@@ -2,11 +2,15 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView, TemplateView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import FormView
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Item, OrderItem, Order
+
+from .forms import CheckoutForm
 
 class HomeView(ListView):
     template_name="home-page.html"
@@ -32,8 +36,15 @@ class ProductView(DetailView):
     template_name="product-page.html"
     model = Item
 
-class CheckOutView(TemplateView):
+class CheckOutView(FormView):
     template_name="checkout-page.html"
+    form_class = CheckoutForm
+    success_url = reverse_lazy("checkout")
+
+    def form_valid(self, form):
+        print("The form is valid")
+
+        return self.form_valid(form)
 
 @login_required
 def add_to_cart(request, slug):
