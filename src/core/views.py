@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Item, OrderItem, Order
+from .models import Item, OrderItem, Order, BillingAddress
 
 from .forms import CheckoutForm
 
@@ -39,12 +39,27 @@ class ProductView(DetailView):
 class CheckOutView(FormView):
     template_name="checkout-page.html"
     form_class = CheckoutForm
-    success_url = reverse_lazy("checkout")
+    success_url = reverse_lazy("core:checkout")
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs['login_user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
-        print("The form is valid")
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            f = form.save(commit=False)
+            f.user = self.request.user
+            f.save()
+            order.billing_address = f
+            order.save()
+            return super().form_valid(form)
 
-        return self.form_valid(form)
+        except ObjectDoesNotExist:
+            messages.error(self.request, "アクティブなオーダーがありません")
+            return redirect("core:order-summary")
+        
 
 @login_required
 def add_to_cart(request, slug):

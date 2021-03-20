@@ -9,7 +9,10 @@
       <div class="row">
         <div class="col-md-8 mb-4">
           <div class="card">
-            <form class="card-body">
+          {% if form.errors %}
+          {{ form.errors }}
+          {% endif %}
+            <form class="card-body" method="POST">{% csrf_token %}
               <div class="md-form mb-5">
                 {% comment %} <input type="text" id="address" class="form-control" placeholder="1234 Main St"> {% endcomment %}
                 {{ form.street_address }}
@@ -65,7 +68,7 @@
               <div class="d-block my-3">
               {% for value, name in form.fields.payment_option.choices %}
                 <div class="custom-control custom-radio">
-                  <input id="{{ name }}" name="paymentMethod" type="radio" class="custom-control-input" required> 
+                  <input id="{{ name }}" name="payment_option" type="radio" class="custom-control-input" required value="{{ value }}"> 
                   <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
                 </div>
               {% endfor %}
